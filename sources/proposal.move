@@ -39,28 +39,32 @@ public fun vote(self: &mut Proposal, vote_yes: bool, ctx: &mut TxContext) {
     issue_vote_proof(self, vote_yes, ctx);
 }
 
-public fun title(proposal: &Proposal): String {
-    proposal.title
+public fun vote_proof_url(self: &VoteProofNFT): Url {
+    self.url
 }
 
-public fun description(proposal: &Proposal): String {
-    proposal.description
+public fun title(self: &Proposal): String {
+    self.title
 }
 
-public fun voted_yes_count(proposal: &Proposal): u64 {
-    proposal.voted_yes_count
+public fun description(self: &Proposal): String {
+    self.description
 }
 
-public fun voted_no_count(proposal: &Proposal): u64 {
-    proposal.voted_no_count
+public fun voted_yes_count(self: &Proposal): u64 {
+    self.voted_yes_count
 }
 
-public fun expiration(proposal: &Proposal): u64 {
-    proposal.expiration
+public fun voted_no_count(self: &Proposal): u64 {
+    self.voted_no_count
 }
 
-public fun creator(proposal: &Proposal): address {
-    proposal.creator
+public fun expiration(self: &Proposal): u64 {
+    self.expiration
+}
+
+public fun creator(self: &Proposal): address {
+    self.creator
 }
 
 public fun voters(self: &Proposal): &Table<address, bool> {
