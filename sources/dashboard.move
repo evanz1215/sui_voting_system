@@ -48,7 +48,7 @@ public fun issue_admin_cap(ctx: &mut TxContext) {
 }
 
 #[test_only]
-public fun new_otw(ctx: &mut TxContext): DASHBOARD {
+public fun new_otw(_ctx: &mut TxContext): DASHBOARD {
     DASHBOARD {}
 }
 

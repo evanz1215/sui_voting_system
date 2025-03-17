@@ -49,6 +49,10 @@ public fun vote_proof_url(self: &VoteProofNFT): Url {
     self.url
 }
 
+public fun status(self: &Proposal): &ProposalStatus {
+    &self.status
+}
+
 public fun title(self: &Proposal): String {
     self.title
 }
@@ -133,4 +137,24 @@ fun issue_vote_proof(proposal: &Proposal, vote_yes: bool, ctx: &mut TxContext) {
     };
 
     transfer::transfer(proof, ctx.sender());
+}
+
+#[test_only]
+public fun is_active(self: &Proposal): bool {
+    let status = self.status();
+
+    match (status) {
+        ProposalStatus::Active => true,
+        _ => false,
+    }
+}
+
+#[test_only]
+public fun set_active_status(self: &mut Proposal, _admin_cap: &AdminCap) {
+    self.change_status(_admin_cap, ProposalStatus::Active);
+}
+
+#[test_only]
+public fun set_deleted_status(self: &mut Proposal, _admin_cap: &AdminCap) {
+    self.change_status(_admin_cap, ProposalStatus::Deleted);
 }
