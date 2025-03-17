@@ -111,6 +111,23 @@ public fun create(
     id
 }
 
+public fun remove(self: Proposal, _admin_cap: &AdminCap) {
+    let Proposal {
+        id,
+        title: _,
+        description: _,
+        voted_yes_count: _,
+        voted_no_count: _,
+        expiration: _,
+        status: _,
+        voters,
+        creator: _,
+    } = self;
+
+    table::drop(voters);
+    object::delete(id);
+}
+
 public fun change_status(self: &mut Proposal, _admin_cap: &AdminCap, status: ProposalStatus) {
     self.status = status;
 }
