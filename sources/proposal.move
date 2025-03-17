@@ -1,11 +1,14 @@
 module voting_system::proposal;
 
 use std::string::String;
+use sui::clock::Clock;
 use sui::table::{Self, Table};
 use sui::url::{Url, new_unsafe_from_bytes};
 use voting_system::dashboard::AdminCap;
 
 const EDuplicateVote: u64 = 0;
+const EProposalDelisted: u64 = 1;
+const EProposalExpired: u64 = 2;
 
 public enum ProposalStatus has drop, store {
     Active,
@@ -32,7 +35,9 @@ public struct VoteProofNFT has key {
     url: Url,
 }
 
-public fun vote(self: &mut Proposal, vote_yes: bool, ctx: &mut TxContext) {
+public fun vote(self: &mut Proposal, vote_yes: bool, clock: &Clock, ctx: &mut TxContext) {
+    assert!(self.expiration > clock.timestamp_ms(), EProposalExpired);
+    assert!(self.is_active(), EProposalDelisted);
     assert!(!self.voters.contains(ctx.sender()), EDuplicateVote);
 
     if (vote_yes) {
