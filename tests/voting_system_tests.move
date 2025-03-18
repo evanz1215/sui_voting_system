@@ -361,3 +361,42 @@ fun test_voting_expiration() {
 
     scenario.end();
 }
+
+#[test]
+#[expected_failure(abort_code = test_scenario::EEmptyInventory)]
+fun test_remove_proposal() {
+    let admin = @0xA01;
+
+    let mut scenario = test_scenario::begin(admin);
+    {
+        dashboard::issue_admin_cap(scenario.ctx());
+    };
+
+    scenario.next_tx(admin);
+    {
+        let admin_cap = scenario.take_from_sender<AdminCap>();
+
+        new_proposal(&admin_cap, scenario.ctx());
+
+        test_scenario::return_to_sender(&scenario, admin_cap);
+    };
+
+    scenario.next_tx(admin);
+    {
+        let proposal = scenario.take_shared<Proposal>();
+        let admin_cap = scenario.take_from_sender<AdminCap>();
+
+        proposal.remove(&admin_cap);
+
+        scenario.return_to_sender(admin_cap);
+    };
+
+    scenario.next_tx(admin);
+    {
+        let proposal = scenario.take_shared<Proposal>();
+
+        test_scenario::return_shared(proposal);
+    };
+
+    scenario.end();
+}
