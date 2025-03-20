@@ -134,7 +134,7 @@ fun test_voting() {
     //     let admin_cap = scenario.take_from_sender<AdminCap>();
     //     let mut proposal = scenario.take_shared<Proposal>();
 
-    //     proposal.set_deleted_status(&admin_cap);
+    //     proposal.set_delisted_status(&admin_cap);
 
     //     test_scenario::return_shared(proposal);
     //     scenario.return_to_sender(admin_cap);
@@ -297,7 +297,7 @@ fun test_change_proposal_status() {
 
         let admin_cap = scenario.take_from_sender<AdminCap>();
 
-        proposal.set_deleted_status(&admin_cap);
+        proposal.set_delisted_status(&admin_cap);
 
         assert!(!proposal.is_active(), EWrongStatus);
 

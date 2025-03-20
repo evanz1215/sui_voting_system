@@ -13,7 +13,7 @@ const EProposalExpired: u64 = 2;
 
 public enum ProposalStatus has drop, store {
     Active,
-    Deleted,
+    Delisted,
 }
 
 public struct Proposal has key {
@@ -156,8 +156,8 @@ public fun set_active_status(self: &mut Proposal, _admin_cap: &AdminCap) {
     self.change_status(_admin_cap, ProposalStatus::Active);
 }
 
-public fun set_deleted_status(self: &mut Proposal, _admin_cap: &AdminCap) {
-    self.change_status(_admin_cap, ProposalStatus::Deleted);
+public fun set_delisted_status(self: &mut Proposal, _admin_cap: &AdminCap) {
+    self.change_status(_admin_cap, ProposalStatus::Delisted);
 }
 
 fun change_status(self: &mut Proposal, _admin_cap: &AdminCap, status: ProposalStatus) {
