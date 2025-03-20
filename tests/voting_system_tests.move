@@ -9,7 +9,6 @@ use voting_system::proposal::{Self, Proposal, VoteProofNFT};
 const EWrongVoteCount: u64 = 0;
 const EWrongNftUrl: u64 = 1;
 const EWrongStatus: u64 = 2;
-const EProposalExpired: u64 = 3;
 
 fun new_proposal(admin_cap: &AdminCap, ctx: &mut TxContext): ID {
     let title = b"Test".to_string();
