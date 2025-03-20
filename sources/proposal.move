@@ -2,6 +2,7 @@ module voting_system::proposal;
 
 use std::string::String;
 use sui::clock::Clock;
+use sui::event;
 use sui::table::{Self, Table};
 use sui::url::{Url, new_unsafe_from_bytes};
 use voting_system::dashboard::AdminCap;
@@ -35,6 +36,14 @@ public struct VoteProofNFT has key {
     url: Url,
 }
 
+public struct VoteRegistered has copy, drop {
+    proposal_id: ID,
+    voter: address,
+    vote_yes: bool,
+}
+
+// === Public Functions ===
+
 public fun vote(self: &mut Proposal, vote_yes: bool, clock: &Clock, ctx: &mut TxContext) {
     assert!(self.expiration > clock.timestamp_ms(), EProposalExpired);
     assert!(self.is_active(), EProposalDelisted);
@@ -48,6 +57,12 @@ public fun vote(self: &mut Proposal, vote_yes: bool, clock: &Clock, ctx: &mut Tx
 
     self.voters.add(ctx.sender(), vote_yes);
     issue_vote_proof(self, vote_yes, ctx);
+
+    event::emit(VoteRegistered {
+        proposal_id: self.id.to_inner(),
+        voter: ctx.sender(),
+        vote_yes,
+    });
 }
 
 public fun vote_proof_url(self: &VoteProofNFT): Url {
